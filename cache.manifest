@@ -1,0 +1,19 @@
+CACHE MANIFEST
+# Version 0.0.0.3
+
+CACHE:
+./index.html
+# css
+./normalize.css
+./main.css
+# js
+./jquery-2.0.3.min.js
+# fonts
+./fonts/dazS1PrQQuCxC3iOAJFEJRbnBKKEOwRKgsHDreGcocg.woff
+./fonts/MEz38VLIFL-t46JUtkIEgKwsIWd7evfOerjO4J_CQWU.woff
+# images
+./images/133VW32U2250-12933.jpg
+./images/2191832-185921-.jpg
+
+# NETWORK:
+# /offline/index.html

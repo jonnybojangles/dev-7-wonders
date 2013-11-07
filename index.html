@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html manifest="./cache.manifest">
+<head>
+	<title>Dev 7 Wonders</title>
+	<link rel="stylesheet" href="./normalize.css"/>
+	<link rel="stylesheet" href="./main.css"/>
+	<script type="text/javascript">
+		'use strict';
+
+		function Civilization(params){
+			/*
+			* Private members
+			* */
+			/*
+			* @var string The name of this Civilization
+			* */
+  			var _name = '';
+			/*
+			* @var object Available variants of this Civilization
+			* */
+			var _sides = {
+				a: null,
+				b: null
+			};
+			/*
+			* @var string When played the current selected variant
+			* */
+			var _side = null;
+			/*
+			* @var bool Has this Civilization been played?
+			* */
+			var _played = false;
+			/*
+			* @var object Frak EXMAScript
+			* */
+			var that = this;
+			/*
+			* Private methods
+			* */
+			/*
+			* Randomly pick a side.
+			* High-jacked a random member/property picker
+			* @link http://stackoverflow.com/questions/8995503/randomly-select-enumerable-property-of-object-in-javascript
+			* */
+			function _setSide(){
+				var tmpList = Object.keys(_sides);
+				var randomSide = tmpList[Math.floor(Math.random()*tmpList.length)];
+				_side = randomSide;
+				return _side;
+			}
+			/*
+			* Privileged methods
+			* */
+			this.getCurrentSide = function(){
+				var result = _name + ' has not been played.';
+				if (true === _played) {
+					result = _side
+				}
+				return result;
+			};
+			this.getDescription = function(){
+				var result = _name + ' has not been played.';
+				if (true === _played) {
+					result = _sides[_side];
+				}
+				return result;
+			};
+			this.getName = function(){
+				return _name;
+			};
+			this.isPlayed = function() {
+				return _played;
+			};
+			/*
+			* Mark this Civilization as played
+			* */
+			this.play = function(){
+				var currentSide = _side;
+				if (false === _played) {
+					currentSide = _setSide();
+					_played = true;
+				}
+				return currentSide;
+			};
+			/*
+			* "Constructor"
+			* */
+			this.init = function(obj){
+				for (var prop in obj ) {
+					/*
+					* Defaults
+					* */
+					switch (prop) {
+						case 'name':
+							_name = obj[prop];
+							break;
+						// @todo this is not DRY and I don't like to look at it!
+						case 'sides':
+							if ('undefined' !== typeof obj[prop].a) {
+								_sides.a = obj[prop].a;
+							}
+							if ('undefined' !== typeof obj[prop].b) {
+								_sides.b = obj[prop].b;
+							}
+							break;
+					}
+				}
+			};
+			return this.init(params);
+		}
+
+		var civCards = [
+			new Civilization({
+				name: 'The Colossus of Rhodes',
+				sides: {
+					a: 'The player adds 2 Shields to their total in each conflict resolution.',
+					b: 'The Colossus is built in 2 stages: The first stage is worth 1 Shield, 3 coins and 3 victory points. The second stage is worth 1 Shield, 4 coins and 4 victory points.'
+				}
+			}),
+			new Civilization({
+				name: 'The Lighthouse of Alexandria',
+				sides: {
+					a: 'The player gains a resource of their choice from the 4 Raw material types [Stone, Clay, Wood, Ore] every turn. Clarification : this resource cannot be sold through commerce.',
+					b: 'The first stage allows the player to gain one resource of their choice from among the 4 raw materials [Stone, Clay, Wood, Ore] each turn. • the second stage allows the player to gain one manufactured good of their choice chosen from among the 3 types [Glass, Textile, Papyrus] each turn. The third stage is worth 7 victory points. Clarification : these resources cannot be bought by neighboring cities.'
+				}
+			}),
+			new Civilization({
+				name: 'The Temple of Artemis in Ephesus',
+				sides: {
+					a: 'The player takes 9 coins from the bank and adds them to their treasury. Clarification : the 9 coins are taken from the bank only once, immediately after this stage has been built.',
+					b: 'The first stage is worth 4 coins and 2 victory points. The second stage is worth 4 coins and 3 victory points. The third stage is worth 4 coins and 5 victory points. Clarification : the coins are taken from the bank only once, immediately after the stage has been built'
+				}
+			}),
+			new Civilization({
+				name: 'The Hanging Gardens of Babylon',
+				sides: {
+					a: 'At the end of the game, the player gains an extra scientific symbol of their choice. Clarification : the choice of symbol is made at the end of the game, when counting victory points, and not when this stage of the Wonder is built.',
+					b: 'The first stage is worth 3 victory points. The second stage gives the player the option of playing their seventh Age card instead of discarding it. This card can be played by paying its costs, discarded to earn 3 coins or used in the building of the third phase of the Wonder. The third stage grants the player a scientific symbol of their choice' +
+							'Clarification : - during the sixth turn, the player can therefore play both cards they have in hand. If the second stage of the Wonder is not built, the Babylon player can then build it on their sixth turn and then play the seventh card ins- tead of discarding it. - the choice of the symbol is made at the end of the game and not on the turn in which the stage of the Wonder is built.'
+				}
+			}),
+			new Civilization({
+				name: 'The Statue of Zeus in Olympia',
+				sides: {
+					a: 'The player can, once per Age, build a structure of their choice for free. Clarification : the player can place the card used as a construction marker above the Wonder board and replace it underneath when this ability has been used.',
+					b: 'The first stage allows the player to purchase raw materials [Stone, Clay, Wood, Ore] from his or her two neighboring cities for the price of one coin instead of two. The second stage is worth 5 victory points. The third stage allows the player to “copy” a Guild (purple card) of their choice built by one of their two neighboring cities.' +
+							'Clarifications : - the first stage is equivalent to the two Trading Posts, Eastern or Western (yellow cards) : their effect is not cumulative, but the construction of either the Eastern or Western Trading Posts remains possible... - for the third stage, the choice of the Guild is made at the end of the game, when counting points. The player totals the victory points as if they had built that Guild. - Copying a Guild has no effect on the city of the copied Guild’s owner.'
+				}
+			}),
+			new Civilization({
+				name: 'The Mausoleum of Halicarnassus',
+				sides: {
+					a: 'The player can look through all of the cards discarded since the beginning of the game (those discarded for coins as well as those discarded at the end of an age), pick one, and build it for free. Clarification : this special ability takes place at the end of the turn in which this stage is built. If players discard cards this turn (as in the case of the 6th turn of an age), the player can also choose from among them',
+					b: 'The first stage is worth 2 victory points and the player can look at all of the cards discarded since the beginning of the game and build one for free. The second stage is worth 1 victory point and the player can look at all of the cards discarded since the beginning of the game and build one for free. When they build the third stage, the player can look at all of the cards discarded since the beginning of the game and build one for free.' +
+							'Clarification : this special action is taken at the end of the turn in which the stage is built. If players discard cards on that turn (for example, during the 6th turn of an age), the player can also choose from among those cards.'
+				}
+			}),
+			new Civilization({
+				name: 'The Pyramids of Giza',
+				sides: {
+					a: 'The Pyramids don’t have a special ability, their second stage is worth 5 victory points.',
+					b: 'The Pyramids are built in 4 stages, each worth victory points (3,5,5,7) for a total of 20 points.'
+				}
+			}),
+			new Civilization({
+				name: 'Rome - Colosseum',
+				sides: {
+					a: 'Rome produces no resource, but its player recruits his or her Leaders for free (cost: 0 coin). The first stage is worth 4 victory points. The second stage is worth 6 victory points.',
+					b: 'Rome produces no resource, but its player benefits from a 2 coin reduction to the recruitment of all its Leaders (some Leaders are thus free). Neighboring cities benefit from a reduction of 1 coin on the recruitment of their Leaders. The first stage is worth 5 coins. Moreover, the player immediately draws 4 Leader cards from those in the box and adds them to his or her hand of Leader cards. The second stage is worth 3 victory points and the player can immediately put in play an extra Leader (by paying 2 coins less than its printed cost). The third stage is worth 3 victory points and the player can immediately put in play an extra Leader (by paying 2 coins less than its printed cost). Note: Rome B gives the player the chance to put up to 5 Leaders into play instead of the usual 3.'
+				}
+			})
+		];
+		/*
+		* @todo new Civ vs Object.create(Civ)
+		* */
+
+	</script>
+</head>
+<body>
+	<ul class="options">
+		<li class="deal">
+			Deal Card
+		</li>
+	</ul>
+
+	<ul class="cards">
+	</ul>
+	<div class="template">
+		<li>
+			<span class="card">
+				<div class="face"></div>
+				<div class="back">
+					<div class="side">
+						<span class="side-value">
+						</span>
+					</div>
+					<div class="wrapper">
+						<div class="row">
+							<div class="cell">
+								<p class="title">
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="cell">
+								<div class="content-wrapper">
+									<div class="content">
+										<p class="description">
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</span>
+		</li>
+	</div>
+
+	<script type="text/javascript" src="http://codeorigin.jquery.com/jquery-2.0.3.min.js">	</script>
+	<script>
+		if (!window.jQuery) {
+			document.write('<script src="./jquery-2.0.3.min.js"><\/script>');
+		}
+	</script>
+	<script type="text/javascript">
+		var playCards = playCards || {};
+		(function(pc, $){
+			'use strict';
+			pc.setSelectors = function() {
+				this.$cardTemplate = $('.template').children('li');
+				this.$dealButton = $('.deal');
+				this.$cards = $('.cards');
+			};
+			pc.setEvents = function(){
+				/*
+				* Deal a card
+				* */
+				this.$dealButton.on('click', function(e){
+					var total = civCards.length;
+					var dealt = pc.$cards.children('li').length;
+					/*
+					* We cannot have more cards dealt than total number of Civ Cards
+					* */
+					if (dealt < total){
+						pc.$cards.append(pc.$cardTemplate.clone());
+						if (dealt === (total - 1)) {
+							$(e.currentTarget).addClass('disabled');
+						}
+					}
+				});
+				/*
+				* Flip over a city card
+				* */
+				this.$cards.on('click', '.card', function(e){
+					/*
+					* @todo learn the difference between target (? what triggered the event?), delegateTarget (?parent selector?) and currentTarget (?context?)
+					* */
+					var $card = $(e.currentTarget);
+					var civ = {};
+
+					function findUnplayedCiv(){
+						var found = false;
+						var index = 0;
+
+						var result = null;
+						/* Shuffle Civ Deck */
+						civCards.sort(function() { return 0.5 - Math.random() });
+						/* Look for first unplayed */
+						while (false === found) {
+							if (false === civCards[index].isPlayed()) {
+								result = civCards[index]
+								found = true;
+							} else {
+								index++;
+							}
+						}
+						return result;
+					}
+
+ 					if (!$card.hasClass('flipped')) {
+						civ = findUnplayedCiv();
+					    $card.find('.side-value').html(civ.play().toUpperCase());
+						$card.find('.title').html(civ.getName());
+						$card.find('.description').html(civ.getDescription());
+						$(e.currentTarget).toggleClass('flipped');
+					}
+				});
+			};
+			pc.updateTotalCards = function(){
+				if (0 < civCards.length) {
+					$('.totalCards').html(civCards.length);
+				}
+			};
+			pc.init = function(){
+				this.setSelectors();
+				this.setEvents();
+				this.updateTotalCards();
+			};
+			return pc.init();
+		})(playCards, jQuery);
+	</script>
+</body>
+</html>
