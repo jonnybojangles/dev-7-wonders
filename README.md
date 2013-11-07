@@ -1,4 +1,4 @@
-Dev 7 Wonders
+Dev 7 Wonders !
 ===
 While playing the tabletop game Seven Wonders I was asked if it would be possible to program the first step,
 dealing wonder cards. This is my attempt at doing so while practicing private members as detailed by Crockford.
