@@ -9,7 +9,7 @@ Additionally, I have wanted to create an HTML/CSS based card game for sometime n
 - Created a Civilization class for a civilization card
 - Added a cache manifest file for offline support
 
-example
+Example
 ---
 ???
 
