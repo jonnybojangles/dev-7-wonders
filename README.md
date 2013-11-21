@@ -11,7 +11,7 @@ Additionally, I have wanted to create an HTML/CSS based card game for sometime n
 
 Example
 ---
-???
+<http://dev-7-wonders.solidcobalt.com/> as 20131121
 
 To Do
 ---
